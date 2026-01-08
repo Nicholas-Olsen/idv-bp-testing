@@ -1,0 +1,153 @@
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>idV 온라인 가상 밴픽</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <button id="endMatchBtnPermanent" class="hidden">방 종료</button>
+
+  <h1 id="mainTitle">밴픽 시뮬레이터 - 온라인</h1>
+  <div id="setMapInfo"></div>
+  <div id="sessionStatusInfo" class="hidden">
+    <!-- sessionStatusInfo 내부 -->
+    <div id="lobbyTagInfo" style="font-weight:600; margin-bottom:6px;"></div>
+    <div id="myRoleDisplay"></div>
+    <div id="globalBanStatus"></div>
+  </div>
+
+  <div id="onlineLobbyScreen">
+    <h2>밴픽 로비</h2>
+    <div id="lobbyInputGroup">
+      <input type="text" id="lobbyInput" placeholder="방 태그(비밀번호) 입력">
+      <button id="createLobbyBtn">방 생성</button>
+      <button id="joinLobbyBtn">방 입장</button>
+    </div>
+  </div>
+
+  <div id="lobbyWaitScreen" class="hidden">
+    <h2 id="lobbyTitle"></h2>
+
+    <div id="bTeamActions" class="hidden">
+      <button id="readyBtn" disabled>준비 완료</button>
+      <button id="leaveLobbyBtn">나가기</button>
+    </div>
+    <div id="roleChangeContainer" class="hidden">
+      <button id="changeRoleBtn">권한 변경 (B팀 ↔ 관전)</button>
+    </div>
+
+    <div id="hostActions" class="hidden">
+      <button id="startDraftBtn" disabled>밴픽 시작</button>
+      <button id="endLobbyBtn">로비 종료</button>
+    </div>
+
+    <p id="waitMessage"></p>
+  </div>
+
+  <div id="playerListContainer" class="hidden">
+    <h3>참여자 목록</h3>
+    <div id="playerList"></div>
+  </div>
+
+  <!-- 글로벌 밴 선택 -->
+  <div id="globalBanSelect" class="hidden">
+    <h2>글로벌 밴 규칙 사용 여부</h2>
+    <button id="globalOnBtn">ON</button>
+    <button id="globalOffBtn">OFF</button>
+    <br>
+    <button id="globalNextBtn" disabled>다음</button>
+  </div>
+
+  <!-- 세트 선택 -->
+  <div id="setSelect" class="hidden">
+    <h2>현재 세트를 선택하세요</h2>
+    <select id="setNumber">
+      <option value="1">1세트</option>
+      <option value="2">2세트</option>
+      <option value="3">3세트</option>
+      <option value="4">4세트</option>
+      <option value="5">5세트</option>
+    </select>
+    <button id="setgoNextBtn">다음</button>
+  </div>
+
+  <!-- 맵 선택 -->
+  <div id="mapSelect" class="hidden">
+    <h2>맵을 선택하세요</h2>
+    <select id="mapNumber">
+      <option value="1">군수공장</option>
+      <option value="2">붉은성당</option>
+      <option value="3">성심병원</option>
+      <option value="4">호수마을</option>
+      <option value="5">달빛강공원</option>
+      <option value="6">레오의기억</option>
+      <option value="7">에버슬리핑타운</option>
+      <option value="8">차이나타운</option>
+      <option value="9">돌아올 수 없는 숲</option>
+    </select>
+    <button id="mapgoNextBtn">다음</button>
+  </div>
+
+  <!-- 진영 선택 -->
+  <div id="roleSelect" class="hidden">
+    <h2>본인 진영을 선택하세요</h2>
+    <button id="survivorRoleBtn">생존자</button>
+    <button id="hunterRoleBtn">감시자</button>
+    <br>
+    <button id="roleNextBtn" disabled>다음</button>
+  </div>
+
+
+  <!-- 커스텀 글로벌 밴 선택 단계 -->
+  <div id="customGlobalBan" class="hidden">
+    <h2 id="customGlobalHeader">이전 세트의 글로벌 밴 캐릭터를 지정하세요</h2>
+    <div>
+      <h2 id="survivorLabel">생존자 : 0개</h2>
+      <div id="customBanSurvivors" class="cards"></div>
+    </div>
+    <div>
+      <h2 id="hunterLabel">감시자 : 0개</h2>
+      <div id="customBanHunters" class="cards"></div>
+    </div>
+    <button id="confirmCustomBanBtn" disabled>밴픽 시작</button>
+  </div>
+
+  <!-- 밴픽 진행 -->
+  <div id="draftPhase" class="hidden">
+    <h2 id="turnInfo">턴 진행 중...</h2>
+    <div class="cards" id="cardList"></div>
+    <button id="finishTurnBtn" disabled>완료</button>
+    <div id="currentLineup" class="hidden">
+      <h3 style="text-align:center;">현재 팀 구성</h3>
+      <div id="currentSurvivors" class="cards"></div>
+    </div>
+
+  </div>
+
+  <div id="log"></div>
+
+  <!-- 세트 종료 후 선택 -->
+  <div id="endOptions" class="hidden">
+    <button id="nextSetBtn">다음 세트 진행</button>
+  </div>
+
+  <script type="module" src="app.js">
+
+  </script>
+
+  <!-- BGM 엘리먼트와 UI -->
+  <audio id="bgmPlayer" loop preload="auto"></audio>
+
+  <button id="enableAudioBtn" class="small-audio-btn hidden">배경음 재생</button>
+
+  <div id="bgmControls" class="small-audio-controls hidden">
+    <button id="bgmToggleBtn">⏸</button>
+    <input id="bgmVolume" type="range" min="0" max="1" step="0.01" value="0.12" />
+  </div>
+
+</body>
+
+</html>

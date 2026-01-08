@@ -1,0 +1,542 @@
+/* ----------------------------------- */
+/* 온라인 모드 추가 UI */
+/* ----------------------------------- */
+
+/* 온라인 메인 화면 (로비/입장 버튼) */
+#onlineLobbyScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+}
+
+#onlineLobbyScreen button {
+  padding: 25px 60px;
+  font-size: 25px;
+  font-weight: bold;
+  margin: 15px;
+  background-color: #61b8fe;
+  color: #222;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#onlineLobbyScreen button:hover {
+  transform: scale(1.05);
+  background-color: #3b91d8;
+}
+
+/* 로비 입장 및 생성 입력 필드 */
+#lobbyInputGroup {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#lobbyInput {
+  padding: 15px;
+  font-size: 20px;
+  width: 250px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #444;
+  color: #eee;
+  margin-bottom: 15px;
+}
+
+/* 플레이어 목록 (왼쪽 정렬) */
+#playerListContainer {
+  position: absolute;
+  top: 150px; /* 제목 및 역할 정보 아래로 조정 */
+  left: 30px;
+  width: 200px;
+  background-color: #333;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#playerListContainer h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+  color: #f2d586;
+}
+
+.player-item {
+  padding: 5px 0;
+  font-size: 16px;
+}
+
+.player-item.host {
+  font-weight: bold;
+  color: #69dd6b; /* 방장 강조 */
+}
+
+.player-item.ready {
+  color: #90f58d;
+}
+
+.player-item.spectator {
+  color: #aaa;
+}
+
+#mainTitle {
+    margin-bottom: 10px;
+}
+
+/* 역할 및 글로벌 밴 상태 정보창 (가운데 정렬) */
+#sessionStatusInfo {
+  position: absolute;
+  margin-top: 30px; 
+  top: 60px; /* setMapInfo 위치보다 위에 */
+  text-align: center;
+  padding: 10px 20px;
+  background-color: #444;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  min-width: 300px;
+  z-index: 10;
+}
+
+#myRoleDisplay {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f2d586;
+  margin-bottom: 5px;
+}
+
+#globalBanStatus {
+  font-size: 18px;
+  color: #fff;
+}
+
+/* [경기 종료] 버튼 상시 표시 (왼쪽 상단) */
+#endMatchBtnPermanent {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #a73c3c; /* 긴급 종료 강조 */
+  color: #eee;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#endMatchBtnPermanent:hover {
+  background-color: #d15656;
+}
+
+/* B팀 팀장의 준비/나가기 버튼 */
+#bTeamActions {
+  margin-top: 20px;
+}
+
+#readyBtn, #leaveLobbyBtn, #exitRoomBtn {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #55a857;
+  color: #222;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+#leaveLobbyBtn, #exitRoomBtn {
+  background-color: #b84c4c;
+  color: #eee;
+}
+
+#readyBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* 밴픽 시작 버튼 (방장 전용) */
+#startDraftBtn {
+  padding: 25px 50px;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: #69dd6b;
+  color: #222;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+#startDraftBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* ----------------------------------- */
+/* 기존 스타일 css
+/* ----------------------------------- */
+
+
+/* 기본 레이아웃 */
+body {
+  font-family: sans-serif;
+  background: #222;
+  color: #eee;
+  margin:0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 숨김 */
+.hidden { display: none; }
+
+/* 셀렉트/버튼 기본 스타일 */
+select, button { 
+  margin: 10px; 
+  padding: 18px; 
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+/* 밴픽 단계 및 커스텀 글로벌 밴 단계 라벨 여백 */
+#draftPhase h2,
+#draftPhase h3,
+#customGlobalBan h2,
+#customGlobalBan h3 {
+  padding-left: 35px;  /* 좌측 여백 */
+  margin-left: 0;      /* 기본 마진 제거, 필요시 조정 */
+}
+
+.card .long-name {
+  font-size: 15px;      /* 바이올리니스트 조정 */
+  letter-spacing: -0.5px;
+}
+
+.cards {
+  display: flex;           
+  flex-wrap: wrap;         /* 자동 줄바꿈 */
+  justify-content: center; /* 가운데 정렬 */
+  gap: 10px;               /* 카드 간 간격 */
+  margin-top: 20px;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.card-container {
+  position: relative;
+  display: flex;          
+  flex-direction: column;
+  align-items: center;
+  width: 100px;            /* 카드 고정 너비 */
+  height: 130px;           /* 카드 고정 높이 */
+}
+
+/* 카드 */
+.card {
+  position: relative;
+  width: 100px;
+  height: 130px;
+  border: 2px solid #555;   /* 항상 있는 회색 테두리 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+  cursor: pointer;
+  transition: box-shadow 0.2s, opacity 0.2s; 
+  border-radius: 8px;
+  transition: all 0.25s ease; /* 모든 변화 부드럽게 */
+}
+
+.card:hover {
+  background-color: #515151;
+}
+.card:hover span {
+  color: #060606;  
+}
+
+
+.card img { 
+  width: 90px; 
+  height: 90px; 
+  object-fit: cover;
+  transition: transform 0.25s ease; /* 확대 효과 부드럽게 */
+}
+
+.card:hover img {
+  transform: scale(1.10);     /* 살짝 확대 */
+}
+
+.card.picked {
+  box-shadow: 0 0 0 4px #0183ee, 0 0 20px rgba(62,158,254, 0.7);
+  font-weight: bold;
+  border-radius: 10px;
+  opacity: 1.0;
+  cursor: not-allowed;
+}
+
+.card.selected {
+  box-shadow: 0 0 0 4px #7dea47;
+}
+
+.card.banned {
+  filter: brightness(35%);
+  cursor: not-allowed;
+  position: relative;      
+}
+
+.card-ban {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f55042 !important;
+  font-weight: bold;
+  font-size: 70px;
+  z-index: 10; /* 카드보다 위 */
+  pointer-events: none; /* 클릭 무시 */
+  opacity: 0.8 !important;
+  filter: none !important;
+}
+
+.card.globalBanned {
+  box-shadow: 0 0 0 4px #be382c;
+  border-radius: 10px;
+  text-decoration: line-through;
+  opacity: 0.75;
+  filter: brightness(45%);
+  cursor: not-allowed;
+}
+
+
+/* 로그 */
+#log {
+  margin-top: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+  width: 90%;
+  text-align: left;
+  border-top: 1px solid #555;
+  padding: 10px;
+}
+
+
+/* 선택된 버튼 강조 */
+button.selected {
+  background-color: #69dd6b !important; 
+  color: #222;
+  font-weight: bold;
+}
+
+/* 진영 선택 후 다음 버튼 */
+#roleNextBtn, #globalNextBtn {
+  padding: 20px 50px;
+  font-size: 21px;
+  font-weight: bold;
+  background-color: #f2d586;
+  color: #222;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  transition: all 0.25s ease; 
+}
+
+#globalNextBtn:hover, #roleNextBtn:hover {
+  transform: scale(1.1);       
+   color: #141414;                  
+}
+
+#hunterRoleBtn, #survivorRoleBtn { 
+  margin: 10px; 
+  padding: 15 12px; 
+  font-size: 20px;
+  border-radius: 8px;
+  transition: all 0.25s ease; 
+}
+
+#hunterRoleBtn:hover, #survivorRoleBtn:hover {
+   transform: scale(1.1);       
+   color: #141414; 
+   background-color: #c5ceba;   
+   font-weight:bold;              
+}
+
+#globalOnBtn:hover, #globalOffBtn:hover {
+   transform: scale(1.1);       
+   color: #141414; 
+   background-color: #c5ceba;   
+   font-weight:bold;              
+}
+
+#setgoNextBtn, #mapgoNextBtn {
+  padding: 20px 35px;
+  font-size: 21px;
+  font-weight: bold;
+  background-color: #f2d586;
+  color: #222;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  transition: all 0.25s ease; 
+}
+
+#setgoNextBtn:hover, #mapgoNextBtn:hover {
+  transform: scale(1.1);       
+   color: #141414;                  
+}
+
+#roleNextBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* 밴픽 완료 버튼 */
+#finishTurnBtn, #nextSetBtn, #endMatchBtn {
+  margin-top: 20px;
+  margin-left: 40px;
+  padding: 25px 40px;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: #f2d586;
+  color: #222;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease; 
+}
+
+#finishTurnBtn:hover, #nextSetBtn:hover, #endMatchBtn:hover {
+  transform: scale(1.1);       
+   color: #141414;                  
+}
+
+#finishTurnBtn:disabled,
+#nextSetBtn:disabled,
+#endMatchBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* 커스텀 글로벌 밴 완료 버튼 */
+#confirmCustomBanBtn {
+  padding: 20px 50px;    
+  margin-top: 20px;
+  margin-left: 30px;
+  font-size: 25px;          
+  font-weight: bold;
+  background-color: #febc61; 
+  color: #222;
+  border: none;
+  border-radius: 15px; 
+  cursor: pointer;
+  transition: 0.2s;
+  transition: all 0.25s ease; 
+}
+
+#confirmCustomBanBtn:hover {
+  transform: scale(1.1);       
+   color: #141414;                  
+}
+
+#confirmCustomBanBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* 최종 라인업 */
+.finalLineupContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+.finalLineup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* 세트/맵 정보 */
+#setMapInfo {
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  color: #e8e8e8;
+  font-size: 18px;
+}
+
+
+/* --- 참여자 목록 너비를 기준으로 draftPhase 좌측 여백 확보 --- */
+#playerListContainer {
+  position: absolute;
+  top: 150px;
+  left: 30px;
+  width: 200px; /* 원래 너비 */
+}
+
+
+#draftPhase {
+  margin-left: 0; /* 원래대로 */
+  padding-top: 20px;
+}
+
+
+
+.small-audio-btn {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 9999;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  background: #ffd86b;
+  color: #111;
+  border: none;
+  cursor: pointer;
+}
+
+.small-audio-controls {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 9999;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 8px;
+  border-radius: 10px;
+  color: #fff;
+}
+.small-audio-controls button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+.small-audio-controls input[type="range"] {
+  width: 110px;
+}
+.hidden { display: none; }
+
+.selected-by-other { outline: 2px dashed #ffa; opacity: 0.9; }
